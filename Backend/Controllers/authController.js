@@ -1,25 +1,40 @@
 import bcrypt from "bcrypt";
 import UserDB from "../Models/UserModels.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { userName, phoneNumber, email, password } = req.body;
 
-    if (!userName || !email || !password) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Check if the user already exists
+    const existingUser = await UserDB.findOne({
+      $or: [{ userName }, { phoneNumber }, { email }],
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = await UserDB.create({
-      data: { userName, email, password: hashedPassword },
+    // Create a new user
+    const newUser = new UserDB({
+      userName,
+      phoneNumber,
+      email,
+      password: hashedPassword,
+      picture: req.file ? req.file.filename : null, // Save the filename of the uploaded picture
     });
+
+    // Save the new user to the database
+    await newUser.save();
 
     res.status(201).json({ newUser });
   } catch (error) {
-    console.log("error:", error.message);
-    res.status(501).json({ message: "Registion failed" });
+    console.error("Error:", error.message);
+    res.status(500).json({ message: "Registration failed" });
   }
 };
 
@@ -27,27 +42,42 @@ export const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
 
-    // userName Check
-    const user = await UserDB.findUnique({ where: { userName } });
+    const user = await UserDB.findOne({
+      $or: [{ email: userName }, { userName: userName }],
+    });
+    console.log(user);
+
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials!" });
+      return res.status(401).json({ message: "Invalid credentials user!" });
     }
 
-    // Password check
+    // Check password
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ message: "Invalid credentials!" });
+      console.log("Invalid password");
+      return res.status(401).json({ message: "Invalid credentials password!" });
     }
-const age = 1000 * 60 * 60 * 24 * 7
-    res.cookie("test2","myValue2",{
-      httpOnly:true,
-      maxAge:age,
-      // secure:true,
-    })
-    .json({ message: "Login successful." });
 
+    // Generate JWT token
+    const tokenExpiry = "7d"; // 7 days in JWT format
+    const jwtSecret = process.env.JWT_TOKEN; // Ensure your environment variable is correct
+    const token = jwt.sign({ id: user.id }, jwtSecret, {
+      expiresIn: tokenExpiry,
+    });
+
+    const cookieExpiry = 1000 * 60 * 60 * 24 * 7; // 7 days in milliseconds
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: cookieExpiry,
+        // secure: true, // Uncomment this line if using HTTPS
+      })
+      .json({ message: "Login successful." });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ message: "An error occurred during login. Please try again." });
+    res
+      .status(500)
+      .json({ message: "An error occurred during login. Please try again." });
   }
 };

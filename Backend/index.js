@@ -4,6 +4,7 @@ import Connect from "./comman/connection.js";
 import router from "./Routes/authRoutes.js";
 const app = express();
 app.use(express.json());
+
 app.use(cors())
 app.use(router)
 Connect();

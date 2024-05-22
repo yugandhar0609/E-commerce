@@ -1,27 +1,27 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  id: {
+  userName: {
     type: String,
-    default: () => new mongoose.Types.ObjectId(), 
-    alias: '_id', 
+    unique: true, // Ensure userName is unique
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    unique: true, // Ensure phoneNumber is unique
+    required: true,
   },
   email: {
     type: String,
-    unique: true, 
-    required: true, 
-  },
-  userName: {
-    type: String,
-    unique: true, 
-    required: true, 
+    unique: true, // Ensure email is unique
+    required: true,
   },
   password: {
     type: String,
-    required: true, 
+    required: true,
   },
   avatar: {
-    type: String, 
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -29,5 +29,5 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const UserDB = mongoose.model('User', userSchema);
+const UserDB = mongoose.model("NewUser", userSchema);
 export default UserDB;
