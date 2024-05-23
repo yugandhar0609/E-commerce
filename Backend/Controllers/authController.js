@@ -41,6 +41,14 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
+    if (!userName) {
+      return res
+        .status(400)
+        .json({ message: "Please enter the Username or EmailID" });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Please enter the password" });
+    }
 
     const user = await UserDB.findOne({
       $or: [{ email: userName }, { userName: userName }],
@@ -59,23 +67,25 @@ export const login = async (req, res) => {
     }
 
     // Generate JWT token
-    const tokenExpiry = "7d"; // 7 days in JWT format
+    const Expiry = 1000 * 60 * 60 * 24 * 7; 
+
     const jwtSecret = process.env.JWT_TOKEN; // Ensure your environment variable is correct
     const token = jwt.sign({ id: user.id }, jwtSecret, {
-      expiresIn: tokenExpiry,
+      expiresIn: Expiry,
     });
 
-    const cookieExpiry = 1000 * 60 * 60 * 24 * 7; // 7 days in milliseconds
+    // 7 days in milliseconds
 
-    res
+    res.status(200)
       .cookie("token", token, {
         httpOnly: true,
-        maxAge: cookieExpiry,
+        maxAge: Expiry,
+        success :true
         // secure: true, // Uncomment this line if using HTTPS
       })
       .json({ message: "Login successful." });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:", error)
     res
       .status(500)
       .json({ message: "An error occurred during login. Please try again." });
