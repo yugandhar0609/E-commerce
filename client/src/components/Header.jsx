@@ -8,7 +8,6 @@ import { FaOpencart, FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { UserContext } from "./UserContext";
 
-
 const Header = () => {
   const [mobileopen, setMobileopen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,13 +16,14 @@ const Header = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !user) {
-      axios.get("http://localhost:9955/user", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(response => setUser(response.data))
-      .catch(error => console.error("Error fetching user data:", error));
+      axios
+        .get("http://localhost:9955/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => setUser(response.data))
+        .catch((error) => console.error("Error fetching user data:", error));
     }
   }, [user, setUser]);
 
@@ -40,7 +40,9 @@ const Header = () => {
             <span className="font-bold mt-2">Black White</span>
           </Link>
         </div>
-        <NavBar containerStyles={`hidden md:flex gap-x-5 xl:gap-x-10 medium-15`} />
+        <NavBar
+          containerStyles={`hidden md:flex gap-x-5 xl:gap-x-10 medium-15`}
+        />
         <NavBar
           containerStyles={`${
             mobileopen
@@ -58,7 +60,7 @@ const Header = () => {
           {user ? (
             <div className="relative">
               <img
-                src={user.picture}
+                src={`http://localhost:9955/pic/${user.picture}`}
                 alt={user.name}
                 className="h-8 w-8 rounded-full cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -72,7 +74,7 @@ const Header = () => {
                     Profile
                   </Link>
                   <Link
-                    to="/logout"
+                    to="/login"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                   >
                     Logout
@@ -107,7 +109,7 @@ const Header = () => {
           {user ? (
             <div className="relative">
               <img
-                src={user.picture}
+                src={`http://localhost:9955/pic/${user.picture}`}
                 alt={user.name}
                 className="h-8 w-8 rounded-full cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}

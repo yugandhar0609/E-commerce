@@ -38,7 +38,6 @@ export const register = async (req, res) => {
   }
 };
 
-// Login endpoint
 export const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
@@ -79,8 +78,8 @@ export const login = async (req, res) => {
 
 export const getUserPic = async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming `req.user` is populated by the verifyToken middleware
-
+    const userId = req.user._id; 
+    console.log("userId:",userId);
     const user = await UserDB.findById(userId).select('picture');
     if (!user) {
       return res.status(404).json({ message: "User not found" });
