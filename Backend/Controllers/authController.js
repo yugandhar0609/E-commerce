@@ -74,6 +74,8 @@ export const login = async (req, res) => {
       expiresIn: Expiry,
     });
 
+    console.log("toke",token);
+
     // 7 days in milliseconds
 
     res.status(200)
@@ -96,10 +98,10 @@ export const getUserPic = async (req,res) => {
   try {
     const userId = req.user.id
     const userPic = await UserDB.findById(userId).select('-password')
-    if (!user) {
+    if (!userPic) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(user);
+    res.status(200).json(userPic);
   } catch (error) {
     console.error("Error fetching user data:", error.message);
     res.status(500).json({ message: "Failed to fetch user data" });

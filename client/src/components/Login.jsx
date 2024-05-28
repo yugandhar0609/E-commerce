@@ -1,12 +1,12 @@
 import axios from "axios";
-import React, { useState, } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Make sure to import the CSS for Toastify
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [login, setLogin] = useState({ userName: "", password: "" });
-const next = useNavigate()
+  const next = useNavigate();
   const handleOnChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -26,12 +26,11 @@ const next = useNavigate()
         const response = await axios.post("http://localhost:9955/login", login);
         if (response.status === 200) {
           toast.success(response.data.message);
-          setLogin({userName: "", password: ""})
-          next("/")
+          setLogin({ userName: "", password: "" });
+          next("/");
         } else {
           toast.error(response.data.message); // Corrected the response handling
         }
-        
       } catch (error) {
         // Added safety check for error.response
         toast.error(
@@ -45,8 +44,8 @@ const next = useNavigate()
 
   return (
     <div>
-      <ToastContainer position="top-center"/>
-      <div className="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
+      <ToastContainer position="top-center" />
+      <div className="bg-purple-900 absolute top-0  left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
       <div className="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
         <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
           <div className="self-start hidden lg:flex flex-col text-gray-300">
@@ -58,7 +57,7 @@ const next = useNavigate()
             </p>
           </div>
         </div>
-        <div className="flex justify-center self-center z-10">
+        <div className="flex justify-center self-center z-10 mt-24 mx-5">
           <div className="p-12 bg-white mx-auto rounded-3xl w-96">
             <div className="mb-7">
               <h3 className="font-semibold text-2xl text-gray-800">Sign In</h3>
@@ -115,8 +114,7 @@ const next = useNavigate()
                     Sign in
                   </button>
                 </div>
-              
-                
+
                 <div className="mt-7 text-center text-gray-300 text-xs"></div>
               </div>
             </form>
