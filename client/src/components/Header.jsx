@@ -1,30 +1,38 @@
-import React, { useState, useEffect } from "react";
+// Header.js
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import NavBar from "./NavBar";
 import { MdClose, MdMenu } from "react-icons/md";
 import { FaOpencart, FaUserCircle } from "react-icons/fa";
-import axios from "axios"; // Import Axios
+import axios from "axios";
+import { UserContext } from "./UserContext";
+
 
 const Header = () => {
   const [mobileopen, setMobileopen] = useState(false);
-  const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    // Use Axios to fetch user data
-    axios
-      .get("http://localhost:9955/user", { withCredentials: true })
-      .then((response) => setUser(response.data))
-      .catch((error) => console.error("Error fetching user data:", error));
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token && !user) {
+      axios.get("http://localhost:9955/user", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => setUser(response.data))
+      .catch(error => console.error("Error fetching user data:", error));
+    }
+  }, [user, setUser]);
 
   const toggleMenu = () => {
     setMobileopen(!mobileopen);
   };
 
   return (
-    <div className="text-tertiary  backdrop-blur-lg fixed top-0 w-full ring-1 ring-slate-900/5 z-10">
+    <div className="text-tertiary backdrop-blur-lg fixed top-0 w-full ring-1 ring-slate-900/5 z-10">
       <div className="px-4 flex items-center justify-between py-4 max-xs:px-2">
         <div className="flex sm:justify-start flex-grow sm:flex-grow-0">
           <Link to="/" className="flex items-center space-x-3">
@@ -32,9 +40,7 @@ const Header = () => {
             <span className="font-bold mt-2">Black White</span>
           </Link>
         </div>
-        <NavBar
-          containerStyles={`hidden md:flex gap-x-5 xl:gap-x-10 medium-15`}
-        />
+        <NavBar containerStyles={`hidden md:flex gap-x-5 xl:gap-x-10 medium-15`} />
         <NavBar
           containerStyles={`${
             mobileopen
@@ -66,7 +72,7 @@ const Header = () => {
                     Profile
                   </Link>
                   <Link
-                    to="/login"
+                    to="/logout"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                   >
                     Logout
@@ -115,7 +121,7 @@ const Header = () => {
                     Profile
                   </Link>
                   <Link
-                    to="/logout"
+                    to="/login"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                   >
                     Logout

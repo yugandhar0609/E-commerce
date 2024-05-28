@@ -38,73 +38,57 @@ export const register = async (req, res) => {
   }
 };
 
+// Login endpoint
 export const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
-    if (!userName) {
-      return res
-        .status(400)
-        .json({ message: "Please enter the Username or EmailID" });
-    }
-    if (!password) {
-      return res.status(400).json({ message: "Please enter the password" });
+
+    if (!userName || !password) {
+      return res.status(400).json({ message: "Please enter both Username and Password" });
     }
 
     const user = await UserDB.findOne({
       $or: [{ email: userName }, { userName: userName }],
     });
-    
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials user!" });
+      return res.status(401).json({ message: "Invalid credentials!" });
     }
 
-    // Check password
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      console.log("Invalid password");
-      return res.status(401).json({ message: "Invalid credentials password!" });
+      return res.status(401).json({ message: "Invalid credentials!" });
     }
 
-    // Generate JWT token
-    const Expiry = 1000 * 60 * 60 * 24 * 7; 
-
-    const jwtSecret = process.env.JWT_TOKEN; // Ensure your environment variable is correct
-    const token = jwt.sign({ id: user.id }, jwtSecret, {
-      expiresIn: Expiry,
-    });
-
-    console.log("toke",token);
-
-    // 7 days in milliseconds
+    const jwtSecret = process.env.JWT_TOKEN;
+    const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '7d' });
 
     res.status(200)
       .cookie("token", token, {
         httpOnly: true,
-        maxAge: Expiry,
-        success :true
-        // secure: true, // Uncomment this line if using HTTPS
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        // secure: true, // Uncomment this if using HTTPS
       })
-      .json({ message: "Login successful." });
+      .json({ message: "Login successful.", token });
   } catch (error) {
-    console.error("Error:", error)
-    res
-      .status(500)
-      .json({ message: "An error occurred during login. Please try again." });
+    console.error("Error:", error);
+    res.status(500).json({ message: "An error occurred during login. Please try again." });
   }
-}
+};
 
-export const getUserPic = async (req,res) => {
+
+export const getUserPic = async (req, res) => {
   try {
-    const userId = req.user.id
-    const userPic = await UserDB.findById(userId).select('-password')
-    if (!userPic) {
+    const userId = req.user._id; // Assuming `req.user` is populated by the verifyToken middleware
+
+    const user = await UserDB.findById(userId).select('picture');
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(userPic);
+
+    res.status(200).json({ picture: user.picture, message: "User available" });
   } catch (error) {
     console.error("Error fetching user data:", error.message);
     res.status(500).json({ message: "Failed to fetch user data" });
-    
   }
-}
+};

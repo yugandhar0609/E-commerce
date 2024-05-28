@@ -1,19 +1,23 @@
+// Login.js
 import axios from "axios";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Make sure to import the CSS for Toastify
-import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "./UserContext.jsx";
+
+
 const Login = () => {
   const [login, setLogin] = useState({ userName: "", password: "" });
-  const next = useNavigate();
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
+
   const handleOnChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setLogin((login) => ({ ...login, [name]: value }));
   };
 
-  // Corrected function name: handleOnSubmit
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     const { userName, password } = login;
@@ -25,19 +29,20 @@ const Login = () => {
       try {
         const response = await axios.post("http://localhost:9955/login", login);
         if (response.status === 200) {
+          const { token, user } = response.data;
+          localStorage.setItem("token", token); // Store the token in local storage
+          setUser(user); // Set the user data in context
           toast.success(response.data.message);
           setLogin({ userName: "", password: "" });
-          next("/");
+          navigate("/");
         } else {
-          toast.error(response.data.message); // Corrected the response handling
+          toast.error(response.data.message);
         }
       } catch (error) {
-        // Added safety check for error.response
         toast.error(
           (error.response && error.response.data.message) ||
-            "An error occurred. Please try again."
+          "An error occurred. Please try again."
         );
-        2;
       }
     }
   };
@@ -45,7 +50,7 @@ const Login = () => {
   return (
     <div>
       <ToastContainer position="top-center" />
-      <div className="bg-purple-900 absolute top-0  left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
+      <div className="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
       <div className="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
         <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
           <div className="self-start hidden lg:flex flex-col text-gray-300">

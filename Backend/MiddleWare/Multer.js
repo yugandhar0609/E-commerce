@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import UserDB from "../Models/UserModels.js";
+import jwt from 'jsonwebtoken'
 
 const uploadsDir = path.join("public", "userProfile");
 if (!fs.existsSync(uploadsDir)) {
@@ -25,23 +26,25 @@ export const singleUpload = upload.single("picture");
 
 
 
+// Middleware to verify token
 export const verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Access denied, no token provided" });
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "Access denied, no token provided" });
     }
-    let withoutBearer = token.split(" ")[1];
-    if (!withoutBearer) {
-      return res
-        .status(401)
-        .json({ message: "Access denied, no Bearer provided" });
-    }
-    console.log("withoutBearer",withoutBearer);
 
-    const decoded = jwt.verify(withoutBearer, process.env.JWT_TOKEN);
+    console.log("Authorization Header:", authHeader);
+
+    const tokenParts = authHeader.split(" ");
+    if (tokenParts[0] !== "Bearer" || !tokenParts[1]) {
+      return res.status(401).json({ message: "Access denied, malformed token" });
+    }
+
+    const token = tokenParts[1];
+    console.log("JWT Token:", token);
+
+    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
     const user = await UserDB.findById(decoded.id).select("-password");
 
     if (!user) {
