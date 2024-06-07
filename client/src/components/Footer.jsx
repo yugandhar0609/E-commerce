@@ -163,7 +163,7 @@ const Footer = () => {
                   </li>
                   <li class="mt-3">
                     <a class="text-gray-500 cursor-pointer hover:text-gray-900">
-                      +123-456-7890
+                      +91 9566973727
                     </a>
                   </li>
                 </nav>
@@ -173,7 +173,7 @@ const Footer = () => {
           <div class="bg-gray-300">
             <div class="container px-5 py-4 mx-auto">
               <p class="text-sm text-gray-700 capitalize xl:text-center">
-                © 2020 All rights reserved{" "}
+                © Powered by yugandhar{" "}
               </p>
             </div>
           </div>

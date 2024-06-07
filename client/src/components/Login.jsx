@@ -36,7 +36,7 @@ const Login = () => {
           setLogin({ userName: "", password: "" });
           navigate("/");
         } else {
-          toast.error(response.data.message);
+          toast.error(response.data.message)
         }
       } catch (error) {
         toast.error(

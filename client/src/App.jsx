@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 function App() {
   const location = useLocation();
   const hideHeaderRoutes = ["/login", "/register"];
+  const hideFooterRoutes = ["/login", "/register"];
 
   return (
     <>
@@ -27,7 +28,7 @@ function App() {
         </Route>
         <Route path="/cart" element={<Cart />} />
       </Routes>
-      <Footer/>
+      {!hideFooterRoutes.includes(location.pathname) && <Footer />}
     </>
   );
 }
