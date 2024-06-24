@@ -15,15 +15,18 @@ const Hero = () => {
         </p>
         <div className="flexStart !items-center gap-x-4 my-10">
           <div className="flexCenter gap-x-3 !regular-24 text-yellow-400">
-            <FaStar/>
-            <FaStar/>
-            <FaStar/>
-            <FaStar/>
-            <FaStar/>
+            <FaStar />
+            <FaStar />
+            <FaStar />
+            <FaStar />
+            <FaStar />
           </div>
           <div className="bold-16 sm:bold-20">
             176k
-            <span className=" regular-16 sm:regular-20"> Excellent Reviews</span>
+            <span className=" regular-16 sm:regular-20">
+              {" "}
+              Excellent Reviews
+            </span>
           </div>
         </div>
         <div className="max-xs:flex-col flex gap-2 ">

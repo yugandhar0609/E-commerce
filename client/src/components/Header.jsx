@@ -1,5 +1,4 @@
-// Header.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import NavBar from "./NavBar";
@@ -12,6 +11,7 @@ const Header = () => {
   const [mobileopen, setMobileopen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,6 +30,24 @@ const Header = () => {
   const toggleMenu = () => {
     setMobileopen(!mobileopen);
   };
+
+  // Function to handle clicks outside the menu
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <div className="text-tertiary backdrop-blur-lg fixed top-0 w-full ring-1 ring-slate-900/5 z-10">
@@ -54,11 +72,11 @@ const Header = () => {
           <Link to="/" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              1
+              2
             </span>
           </Link>
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={menuRef}>
               <img
                 src={`http://localhost:9955/pic/${user.picture}`}
                 alt={user.name}
@@ -103,11 +121,11 @@ const Header = () => {
           <Link to="/" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              1
+              2
             </span>
           </Link>
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={menuRef}>
               <img
                 src={`http://localhost:9955/pic/${user.picture}`}
                 alt={user.name}

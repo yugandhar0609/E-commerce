@@ -1,4 +1,4 @@
-// latest 
+// latest
 import p5_img from "./product_12.png";
 import p6_img from "./product_35.png";
 import p7_img from "./product_14.png";

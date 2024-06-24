@@ -5,11 +5,11 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import bg from "../assets/REGISTER BG.jpg";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [submitting, setSubmitting] = useState(false);
-  const next = useNavigate()
+  const next = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -45,14 +45,18 @@ const RegisterForm = () => {
       formData.append("picture", values.picture);
 
       try {
-        const response = await axios.post("http://localhost:9955/register", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const response = await axios.post(
+          "http://localhost:9955/register",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        });
+        );
         console.log(response.data);
         toast.success("Registration successful!");
-        next("/login")
+        next("/login");
       } catch (error) {
         console.error("Error:", error);
         toast.error("User already exists");
@@ -61,7 +65,6 @@ const RegisterForm = () => {
       }
     },
   });
-  
 
   return (
     <div>
@@ -216,10 +219,12 @@ const RegisterForm = () => {
                     type="file"
                     name="picture"
                     onChange={(event) => {
-                      formik.setFieldValue("picture", event.currentTarget.files[0]);
+                      formik.setFieldValue(
+                        "picture",
+                        event.currentTarget.files[0],
+                      );
                     }}
                     className="block w-full px-5 py-3 mt-2 text-gray-700 bg-white border border-gray-200 rounded"
-
                   />
                 </div>
 
@@ -230,12 +235,15 @@ const RegisterForm = () => {
                 >
                   <span>{submitting ? "Submitting..." : "Sign Up"}</span>
                 </button>
-               
               </form>
               <div className="mt-5">
-              You have an account? <Link to="/login" className="text-blue-500"> Login here </Link>
+                You have an account?{" "}
+                <Link to="/login" className="text-blue-500">
+                  {" "}
+                  Login here{" "}
+                </Link>
               </div>
-              
+
               <ToastContainer />
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import img from '../assets/1.png'
+import img from "../assets/1.png";
 
 const Footer = () => {
   return (
@@ -9,7 +9,13 @@ const Footer = () => {
           <div class="container flex flex-col flex-wrap px-5 py-24 mx-auto md:items-center lg:items-start md:flex-row md:flex-no-wrap">
             <div class="flex-shrink-0 w-64 mx-auto text-center md:mx-0 md:text-left">
               <a class="flex items-center justify-center font-medium text-gray-900 title-font md:justify-start">
-              <img src={img} alt="logo" height={10} width={200} className="inline-block"/>
+                <img
+                  src={img}
+                  alt="logo"
+                  height={10}
+                  width={200}
+                  className="inline-block"
+                />
               </a>
               <p class="mt-2 text-sm text-gray-500">Design, Code and Ship!</p>
               <div class="mt-4">

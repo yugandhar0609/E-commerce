@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "./UserContext.jsx";
 
-
 const Login = () => {
   const [login, setLogin] = useState({ userName: "", password: "" });
   const navigate = useNavigate();
@@ -36,12 +35,12 @@ const Login = () => {
           setLogin({ userName: "", password: "" });
           navigate("/");
         } else {
-          toast.error(response.data.message)
+          toast.error(response.data.message);
         }
       } catch (error) {
         toast.error(
           (error.response && error.response.data.message) ||
-          "An error occurred. Please try again."
+            "An error occurred. Please try again.",
         );
       }
     }

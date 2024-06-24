@@ -1,5 +1,5 @@
 import React from "react";
-import POPULAR from '../../assets/popular';
+import POPULAR from "../../assets/popular";
 import Items from "./Items";
 
 const Populer = () => {
@@ -10,13 +10,13 @@ const Populer = () => {
         <hr className="h-[3px] w-3/4 md:w-1/2 mx-auto bg-gradient-to-r from-transparent via-black to-transparent mb-12" />
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {POPULAR.map((item) => (
-            <Items 
-              key={item.id} 
-              id={item.id} 
-              image={item.image} 
-              name={item.name} 
-              old_price={`$${item.old_price}`} 
-              new_price={`$${item.new_price}`} 
+            <Items
+              key={item.id}
+              id={item.id}
+              image={item.image}
+              name={item.name}
+              old_price={`$${item.old_price}`}
+              new_price={`$${item.new_price}`}
             />
           ))}
         </div>
