@@ -1,12 +1,15 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import AnimatedHeading from "./AnimatedHeading";
 
 const Hero = () => {
   return (
     <section className="relative bg-hero bg-cover bg-center bg-no-repeat h-screen w-full">
       <div className="max_padd_container relative top-32 xs:top-52">
-        <h1 className="h1 capitalize max-w-[33rem]">Digital shopping hub</h1>
+        <div className="App">
+          <AnimatedHeading text="Digital Shopping Hub" />
+        </div>
         <p className="text-gray-50 regular-16 mt-6 max-w-[33rem]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Id tempora
           incidunt, fugiat natus quidem tenetur iure molestias commodi beatae

@@ -92,3 +92,40 @@ export const AuthContextProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+
+
+import React, { createContext, useState } from "react";
+import all_products from "../assets/all_products";
+
+export const ShopContext = createContext(null);
+
+const getDefaultCart = () => {
+  let cart = {};
+  for (let index = 0; index < all_products.length; index++) {
+    cart[index] = 0;
+  }
+  return cart;
+};
+
+const ShopContextProvider = ({ children }) => { 
+  const [carItems, setCarItems] = useState(getDefaultCart());
+
+  const addToCart = (itemId) => {
+    setCarItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+  };
+
+  const removeFromCart = (itemId) => {
+    setCarItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
+  };
+
+  const contextValue = { all_products, carItems, addToCart, removeFromCart };
+
+  return (
+    <ShopContext.Provider value={contextValue}>
+      {children}
+    </ShopContext.Provider>
+  );
+};
+
+export default ShopContextProvider;

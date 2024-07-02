@@ -1,11 +1,10 @@
 import React from "react";
 import { TbArrowRight } from "react-icons/tb";
 
-const ProductHd = () => {
-  const { product } = props;
+const ProductHd = ({ product }) => {
   return (
     <>
-      <div>
+      <div className="flex items-center flex-wrap gap-x-2 medium-16 my-4 capitalize">
         Home <TbArrowRight /> shop <TbArrowRight /> {product.category}{" "}
         <TbArrowRight /> {product.name}
       </div>

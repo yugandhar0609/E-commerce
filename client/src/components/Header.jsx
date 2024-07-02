@@ -6,6 +6,7 @@ import { MdClose, MdMenu } from "react-icons/md";
 import { FaOpencart, FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { UserContext } from "./UserContext";
+import { ShopContext } from "../Context/ShopContext";
 
 const Header = () => {
   const [mobileopen, setMobileopen] = useState(false);
@@ -48,6 +49,8 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuOpen]);
+
+  const {getTotalAmountCart} =useContext(ShopContext)
 
   return (
     <div className="text-tertiary backdrop-blur-lg fixed top-0 w-full ring-1 ring-slate-900/5 z-10">
@@ -118,10 +121,10 @@ const Header = () => {
           )}
         </div>
         <div className="hidden sm:flex items-center gap-x-2">
-          <Link to="/" className="flex relative">
+          <Link to="/cart" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              2
+              {getTotalAmountCart()}
             </span>
           </Link>
           {user ? (
