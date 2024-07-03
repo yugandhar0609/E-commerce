@@ -14,6 +14,7 @@ const Header = () => {
   const { user, setUser } = useContext(UserContext);
   const menuRef = useRef(null);
 
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !user) {

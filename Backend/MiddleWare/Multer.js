@@ -4,6 +4,7 @@ import fs from "fs";
 import UserDB from "../Models/UserModels.js";
 import jwt from 'jsonwebtoken'
 
+//Resisger Upload
 const uploadsDir = path.join("public", "userProfile");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -21,6 +22,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 export const singleUpload = upload.single("picture");
+
+//Admin upload Image
+
+const uploadsAdmin = path.join("public","productImage");
+if (!fs.existsSync(uploadsAdmin)) {
+  fs.mkdirSync(uploadsAdmin, { recursive: true });
+}
+
+const adminStorage = multer.diskStorage({
+  destination:uploadsDir,
+  filename:(req,file,cb)=>{
+   const uniqueId= Date.now();
+   const fileFormat = file.originalname.split(".").pop();
+   const fileName = file.originalname.split(".")[0];
+   cb(null,`${fileName}-${uniqueId}.${fileFormat}`)
+  }
+})
 
 
 
