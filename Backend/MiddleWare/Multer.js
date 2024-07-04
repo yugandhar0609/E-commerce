@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import UserDB from "../Models/UserModels.js";
 import jwt from 'jsonwebtoken'
+import AdminDB from '../Models/adminModels.js';
 
 //Resisger Upload
 const uploadsDir = path.join("public", "userProfile");
@@ -25,22 +26,23 @@ export const singleUpload = upload.single("picture");
 
 //Admin upload Image
 
-const uploadsAdmin = path.join("public","productImage");
+const uploadsAdmin = path.join('public', 'productImage');
 if (!fs.existsSync(uploadsAdmin)) {
   fs.mkdirSync(uploadsAdmin, { recursive: true });
 }
 
 const adminStorage = multer.diskStorage({
-  destination:uploadsDir,
-  filename:(req,file,cb)=>{
-   const uniqueId= Date.now();
-   const fileFormat = file.originalname.split(".").pop();
-   const fileName = file.originalname.split(".")[0];
-   cb(null,`${fileName}-${uniqueId}.${fileFormat}`)
+  destination: uploadsAdmin,
+  filename: (req, file, cb) => {
+    const uniqueId = Date.now();
+    const fileFormat = file.originalname.split('.').pop();
+    const fileName = file.originalname.split('.')[0];
+    cb(null, `${fileName}-${uniqueId}.${fileFormat}`);
   }
-})
+});
 
-
+const adminUpload = multer({ storage: adminStorage });
+export const productUpload = adminUpload.single('image');
 
 
 
