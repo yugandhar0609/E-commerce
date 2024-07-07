@@ -11,6 +11,15 @@ app.use(cors())
 app.use(router)
 app.use(AdminRouter)
 
+app.use((err, req, res, next) => {
+  console.error('Error:', err.stack);
+  res.status(500).json({
+    message: 'Internal Server Error',
+    error: err.message,
+    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack, // hide stack trace in production
+  });
+});
+
 Connect();
 const port = 9955;
 

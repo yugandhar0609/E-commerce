@@ -26,7 +26,7 @@ const Login = () => {
       toast.error("Enter the password");
     } else {
       try {
-        const response = await axios.post("http://localhost:9955/login", login);
+        const response = await axios.post("https://e-commerce-mm9l.onrender.com/login", login);
         if (response.status === 200) {
           const { token, user } = response.data;
           localStorage.setItem("token", token); // Store the token in local storage

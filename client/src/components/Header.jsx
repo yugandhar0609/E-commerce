@@ -19,7 +19,7 @@ const Header = () => {
     const token = localStorage.getItem("token");
     if (token && !user) {
       axios
-        .get("http://localhost:9955/user", {
+        .get("https://e-commerce-mm9l.onrender.com/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
