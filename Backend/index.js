@@ -17,6 +17,8 @@ app.listen(port, () => {
   console.log("server in running on:", port);
 });
 
-app.get('/health', (req, res) => {
-  res.status(200).send('Server is healthy');
+app.get('/health', async (req, res) => {
+  const dbState = mongoose.connection.readyState;
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.status(200).send(`Server is healthy. Database status: ${states[dbState]}`);
 });
