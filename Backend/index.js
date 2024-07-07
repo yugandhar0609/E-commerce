@@ -3,6 +3,7 @@ import cors from 'cors'
 import Connect from "./comman/connection.js";
 import router from "./Routes/authRoutes.js";
 import AdminRouter from "./Routes/adminRoutes.js";
+import mongoose from "mongoose";
 const app = express();
 app.use(express.json());
 
