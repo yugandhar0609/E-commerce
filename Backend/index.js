@@ -16,3 +16,7 @@ const port = 9955;
 app.listen(port, () => {
   console.log("server in running on:", port);
 });
+
+app.get('/health', (req, res) => {
+  res.status(200).send('Server is healthy');
+});
