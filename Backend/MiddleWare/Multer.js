@@ -64,7 +64,7 @@ export const verifyToken = async (req, res, next) => {
     const token = tokenParts[1];
     console.log("JWT Token:", token);
 
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+    const decoded = jwt.verify(token, process.env.jwt_Token);
     const user = await UserDB.findById(decoded.id).select("-password");
 
     if (!user) {
