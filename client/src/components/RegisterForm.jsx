@@ -46,7 +46,7 @@ const RegisterForm = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:9955/register",
+          "https://e-commerce-mm9l.onrender.com/register",
           formData,
           {
             headers: {
