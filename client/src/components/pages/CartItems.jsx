@@ -6,7 +6,6 @@ const CartItems = () => {
   const { products, cartItems, removeFromCart, getTotalAmount, addToCart } =
     useContext(ShopContext);
 
- 
   if (!products || products.length === 0) {
     return <p>No products in cart.</p>;
   }
@@ -55,6 +54,7 @@ const CartItems = () => {
                         {product.name}
                       </span>
                     </td>
+
                     <td className="py-2 px-3 text-center">
                       ${product.new_price}
                     </td>
@@ -138,7 +138,7 @@ const CartItems = () => {
                 placeholder="Coupon code"
                 className="bg-transparent border-none outline-none flex-grow ml-3"
               />
-              <button className="btn_dark_rounded md:-ml-3">Submit</button>
+              <button className="btn_dark_rounded  md: -ml-3">Submit</button>
             </div>
           </div>
         </div>

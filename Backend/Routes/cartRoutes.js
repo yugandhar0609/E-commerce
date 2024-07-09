@@ -1,15 +1,11 @@
-import express from "express";
-import {
-  getCartItems,
-  addItemToCart,
-  removeItemFromCart,
-} from "../Controllers/cartController.js";
-import { verifyToken } from "./../MiddleWare/Multer.js";
+import express from 'express';
+import { getUserCart, addToCart, removeFromCart } from '../controllers/cartController.js';
+import { verifyToken } from '../MiddleWare/auth.js';
 
 const cartRouter = express.Router();
 
-cartRouter.get("/:userId", verifyToken, getCartItems);
-cartRouter.post("/:userId/add", verifyToken, addItemToCart);
-cartRouter.post("/:userId/remove", verifyToken, removeItemFromCart);
+cartRouter.get('/cart/:userId', verifyToken, getUserCart);
+cartRouter.post('/cart/:userId/add', verifyToken, addToCart);
+cartRouter.post('/cart/:userId/remove', verifyToken, removeFromCart);
 
 export default cartRouter;

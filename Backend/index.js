@@ -5,7 +5,6 @@ import router from "./Routes/authRoutes.js";
 import authRouter from "./Routes/adminRoutes.js";
 import cookieParser from "cookie-parser";
 import cartRouter from "./Routes/cartRoutes.js";
-import productRouter from "./Routes/productRoutes.js";
 
 
 const app = express();
@@ -15,9 +14,9 @@ app.use(cookieParser());
 app.use(cors())
 app.use(router)
 
-app.use("/api/user", authRouter);
+app.use("/api/users", authRouter);
 app.use("/api/cart", cartRouter);
-app.use("/api/products", productRouter);
+
 
 
 Connect();
