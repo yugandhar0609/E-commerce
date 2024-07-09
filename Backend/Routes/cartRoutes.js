@@ -6,10 +6,10 @@ import {
 } from "../Controllers/cartController.js";
 import { verifyToken } from "./../MiddleWare/Multer.js";
 
-const router = express.Router();
+const cartRouter = express.Router();
 
-router.get("/:userId", verifyToken, getCartItems);
-router.post("/:userId/add", verifyToken, addItemToCart);
-router.post("/:userId/remove", verifyToken, removeItemFromCart);
+cartRouter.get("/:userId", verifyToken, getCartItems);
+cartRouter.post("/:userId/add", verifyToken, addItemToCart);
+cartRouter.post("/:userId/remove", verifyToken, removeItemFromCart);
 
-export default router;
+export default cartRouter;

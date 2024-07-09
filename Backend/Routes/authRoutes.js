@@ -1,12 +1,13 @@
 import express from "express";
-import { verifyToken, singleUpload } from "../MiddleWare/Multer.js";
-import { register,login, getUserPic } from "../Controllers/authController.js";
+import { verifyToken, singleUpload,authenticateToken} from "../MiddleWare/Multer.js";
+import { register,login, getUserPic,getUser } from "../Controllers/authController.js";
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post("/register",singleUpload, register);
-router.post("/login", login);
-router.get("/user",verifyToken, getUserPic)
-router.use("/pic", express.static("public/userProfile"))
+authRouter.post("/register",singleUpload, register);
+authRouter.post("/login", login);
+authRouter.get("/user",verifyToken, getUserPic)
+authRouter.use("/pic", express.static("public/userProfile"))
+authRouter.get("/", authenticateToken, getUser);
 
-export default router;
+export default authRouter;

@@ -2,9 +2,10 @@ import express from "express";
 import cors from 'cors'
 import Connect from "./comman/connection.js";
 import router from "./Routes/authRoutes.js";
-import AdminRouter from "./Routes/adminRoutes.js";
+import authRouter from "./Routes/adminRoutes.js";
 import cookieParser from "cookie-parser";
-import cartRoutes from "./Routes/cartRoutes.js";
+import cartRouter from "./Routes/cartRoutes.js";
+import productRouter from "./Routes/productRoutes.js";
 
 
 const app = express();
@@ -13,9 +14,9 @@ app.use(cookieParser());
 
 app.use(cors())
 app.use(router)
-app.use(AdminRouter)
-app.use("/api/cart", cartRoutes);
-
+app.use("/api/users", authRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/products", productRouter);
 
 
 Connect();
