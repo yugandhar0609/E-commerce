@@ -1,5 +1,5 @@
 // Controllers/cartController.js
-import Cart from "../Models/UserModels.js"
+import Cart from "../Models/CartModels.js"
 import Product from "../Models/ProductModel.js";
 
 export const getCartItems = async (req, res) => {

@@ -76,7 +76,7 @@ const Header = () => {
           <Link to="/" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              2
+            {getTotalAmountCart}
             </span>
           </Link>
           {user ? (
@@ -125,7 +125,7 @@ const Header = () => {
           <Link to="/cart" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              {getTotalAmountCart()}
+              {getTotalAmountCart}
             </span>
           </Link>
           {user ? (
