@@ -1,4 +1,3 @@
-// src/Context/ShopContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import all_products from "../assets/all_products";
@@ -18,37 +17,39 @@ const ShopContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(getDefaultCart);
   const [user, setUser] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchProductsAndUser = async () => {
-      const productsResponse = await axios.get('https://e-commerce-mm9l.onrender.com/api/products');
-      setProducts(productsResponse.data);
+      try {
+        const productsResponse = await axios.get(`${API_URL}/api/products`);
+        setProducts(productsResponse.data);
 
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const userResponse = await axios.get('https://e-commerce-mm9l.onrender.com/api/user', {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const userResponse = await axios.get(`${API_URL}/api/user`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUser(userResponse.data);
-          const cartResponse = await axios.get(`https://e-commerce-mm9l.onrender.com/api/cart/${userResponse.data.id}`);
+          const cartResponse = await axios.get(`${API_URL}/api/cart/${userResponse.data.id}`);
           const cartData = {};
           cartResponse.data.forEach(item => {
             cartData[item.productId._id] = item.quantity;
           });
           setCartItems(cartData);
-        } catch (error) {
-          console.error('Error fetching user or cart data:', error);
         }
+      } catch (error) {
+        console.error('Error fetching products or user data:', error);
       }
     };
 
     fetchProductsAndUser();
-  }, []);
+  }, [API_URL]);
 
   const addToCart = async (productId) => {
     if (user) {
       try {
-        const response = await axios.post(`https://e-commerce-mm9l.onrender.com/api/cart/${user.id}/add`, { productId });
+        const response = await axios.post(`${API_URL}/api/cart/${user.id}/add`, { productId });
         const updatedCartItems = {};
         response.data.forEach(item => {
           updatedCartItems[item.productId._id] = item.quantity;
@@ -65,7 +66,7 @@ const ShopContextProvider = ({ children }) => {
   const removeFromCart = async (productId) => {
     if (user) {
       try {
-        const response = await axios.post(`https://e-commerce-mm9l.onrender.com/api/cart/${user.id}/remove`, { productId });
+        const response = await axios.post(`${API_URL}/api/cart/${user.id}/remove`, { productId });
         const updatedCartItems = {};
         response.data.forEach(item => {
           updatedCartItems[item.productId._id] = item.quantity;

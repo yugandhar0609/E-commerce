@@ -10,6 +10,8 @@ const Login = () => {
   const [login, setLogin] = useState({ userName: "", password: "" });
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleOnChange = (e) => {
     const name = e.target.name;
@@ -26,7 +28,7 @@ const Login = () => {
       toast.error("Enter the password");
     } else {
       try {
-        const response = await axios.post("https://e-commerce-mm9l.onrender.com/login", login);
+        const response = await axios.post(`${API_URL}/login`, login);
         if (response.status === 200) {
           const { token, user } = response.data;
           localStorage.setItem("token", token); // Store the token in local storage
@@ -40,7 +42,7 @@ const Login = () => {
       } catch (error) {
         toast.error(
           (error.response && error.response.data.message) ||
-            "An error occurred. Please try again.",
+            "An error occurred. Please try again."
         );
       }
     }

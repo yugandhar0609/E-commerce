@@ -10,7 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 const RegisterForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const next = useNavigate();
-
+  const API_URL = import.meta.env.VITE_API_URL;
+  
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -46,7 +47,7 @@ const RegisterForm = () => {
 
       try {
         const response = await axios.post(
-          "https://e-commerce-mm9l.onrender.com/register",
+          `${API_URL}/register`,
           formData,
           {
             headers: {
