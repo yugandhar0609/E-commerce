@@ -1,73 +1,61 @@
-// src/Context/ShopContext.jsx
-import React, { createContext, useState, useEffect } from "react";
-import all_products from "../assets/all_products";
+import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-export const ShopContext = createContext(null);
+export const ShopContext = createContext();
 
-const getDefaultCart = () => {
-  let cart = {};
-  all_products.forEach((product) => {
-    cart[product.id] = 0;
-  });
-  return cart;
-};
-
-const ShopContextProvider = ({ children }) => {
-  const [products, setProducts] = useState(all_products);
-  const [cartItems, setCartItems] = useState(() => {
-    const storedCartItems = localStorage.getItem("cartItems");
-    return storedCartItems ? JSON.parse(storedCartItems) : getDefaultCart();
-  });
+export const ShopProvider = ({ children }) => {
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    // Fetch products and user data on mount
+    axios.get('/api/products').then(response => setProducts(response.data));
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('/api/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => setUser(response.data))
+      .catch(error => console.error('Error fetching user data:', error));
+    }
+  }, []);
 
-  const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+  useEffect(() => {
+    if (user) {
+      // Fetch user-specific cart items
+      axios.get(`/api/cart/${user.id}`)
+        .then(response => setCartItems(response.data))
+        .catch(error => console.error('Error fetching cart items:', error));
+    }
+  }, [user]);
+
+  const addToCart = (productId) => {
+    // Add item to cart for the specific user
+    axios.post(`/api/cart/${user.id}/add`, { productId })
+      .then(response => setCartItems(response.data))
+      .catch(error => console.error('Error adding item to cart:', error));
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
+  const removeFromCart = (productId) => {
+    // Remove item from cart for the specific user
+    axios.post(`/api/cart/${user.id}/remove`, { productId })
+      .then(response => setCartItems(response.data))
+      .catch(error => console.error('Error removing item from cart:', error));
   };
 
   const getTotalAmount = () => {
-    let totalAmount = 0;
-
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        let itemsInfo = all_products.find((product) => product.id === Number(item));
-        totalAmount += itemsInfo.new_price * cartItems[item];
-      }
-    }
-
-    return totalAmount.toFixed(2);
-  };
-  const getTotalAmountCart =()=>{
-    let totalItems = 0;
-    for( const items in cartItems){
-      if (cartItems[items]>0) {
-        totalItems += cartItems[items]
-      }
-    }
-    return totalItems;
-  }
-
-  const contextValue = {
-    products,
-    setProducts,
-    cartItems,
-    addToCart,
-    removeFromCart,
-    getTotalAmount,
-    getTotalAmountCart
+    return Object.keys(cartItems).reduce((total, productId) => {
+      const product = products.find(p => p.id === productId);
+      return total + (product ? product.new_price * cartItems[productId] : 0);
+    }, 0).toFixed(2);
   };
 
   return (
-    <ShopContext.Provider value={contextValue}>
+    <ShopContext.Provider value={{ products, cartItems, addToCart, removeFromCart, getTotalAmount, user, setUser }}>
       {children}
     </ShopContext.Provider>
   );
 };
-
-export default ShopContextProvider;

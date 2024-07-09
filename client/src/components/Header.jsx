@@ -82,7 +82,7 @@ const Header = () => {
           {user ? (
             <div className="relative" ref={menuRef}>
               <img
-                src={`http://localhost:9955/pic/${user.picture}`}
+                src={`https://e-commerce-mm9l.onrender.com/pic/${user.picture}`}
                 alt={user.name}
                 className="h-8 w-8 rounded-full cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -131,7 +131,7 @@ const Header = () => {
           {user ? (
             <div className="relative" ref={menuRef}>
               <img
-                src={`http://localhost:9955/pic/${user.picture}`}
+                src={`https://e-commerce-mm9l.onrender.com/pic/${user.picture}`}
                 alt={user.name}
                 className="h-8 w-8 rounded-full cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}

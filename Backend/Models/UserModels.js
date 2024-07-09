@@ -3,17 +3,17 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   userName: {
     type: String,
-    unique: true, // Ensure userName is unique
+    unique: true,
     required: true,
   },
   phoneNumber: {
     type: String,
-    unique: true, // Ensure phoneNumber is unique
+    unique: true, 
     required: true,
   },
   email: {
     type: String,
-    unique: true, // Ensure email is unique
+    unique: true, 
     required: true,
   },
   password: {
@@ -27,6 +27,25 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  items: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
+    },
+  ],
 });
 
 const UserDB = mongoose.model("NewUser", userSchema);
