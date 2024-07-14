@@ -14,6 +14,7 @@ import ScrollToTop from "./components/pages/ScrollToTop ";
 import bannerMens from "./assets/bannermens.png";
 import bannerWomens from './assets/bannerwomens.png';
 import bannerKids from './assets/bannerkids.png';
+import UserProfile from "./components/pages/UserProfile";
 
 // Lazy-loaded components
 const Product = lazy(() => import("./components/pages/Product"));
@@ -37,8 +38,10 @@ function App() {
         <Route path="/:category/product/:productId" element={<Suspense fallback={<div>Loading...</div>}><Product /></Suspense>} />
         <Route path="/product/:productId" element={<Suspense fallback={<div>Loading...</div>}><Product /></Suspense>} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/profile" element={<UserProfile/>} />
+
       </Routes>
-      {!hideFooterRoutes.includes(location.pathname) && <Footer />}
+      {/* {!hideFooterRoutes.includes(location.pathname) && <Footer />} */}
     </ShopContextProvider>
   );
 }

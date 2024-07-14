@@ -1,7 +1,6 @@
-import Cart from "../Models/CartModels.js";
-// import UserDB from "../Models/UserModels.js";
+import Cart from '../models/CartModels.js';
 
-// Fetch user's cart items
+// Get user's cart
 export const getUserCart = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -12,11 +11,11 @@ export const getUserCart = async (req, res) => {
   }
 };
 
-// Add item to user's cart
+// Add item to cart
 export const addToCart = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { productId, productName, productPrice, productImage } = req.body;
+    const { productId, quantity, name, price, image } = req.body;
 
     let cart = await Cart.findOne({ user: userId });
     if (!cart) {
@@ -25,14 +24,14 @@ export const addToCart = async (req, res) => {
 
     const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
     if (itemIndex > -1) {
-      cart.items[itemIndex].quantity += 1;
+      cart.items[itemIndex].quantity += quantity;
     } else {
       cart.items.push({
         productId,
-        quantity: 1,
-        name: productName,
-        price: productPrice,
-        image: productImage,
+        quantity,
+        name,
+        price,
+        image,
       });
     }
 
@@ -43,7 +42,7 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// Remove item from user's cart
+// Remove item from cart
 export const removeFromCart = async (req, res) => {
   try {
     const userId = req.params.userId;

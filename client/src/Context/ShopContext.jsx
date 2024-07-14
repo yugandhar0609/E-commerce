@@ -14,69 +14,100 @@ const getDefaultCart = () => {
 
 const ShopContextProvider = ({ children }) => {
   const [products, setProducts] = useState(all_products);
-  const [cartItems, setCartItems] = useState(getDefaultCart);
+  const [cartItems, setCartItems] = useState(getDefaultCart());
   const [user, setUser] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL;
-
+  const API_URL =  import.meta.env.VITE_API_URL;
   useEffect(() => {
-    const fetchProductsAndUser = async () => {
-      try {
-        const productsResponse = await axios.get(`${API_URL}/api/products`);
-        setProducts(productsResponse.data);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token);
+    }
+  }, []);
 
-        const token = localStorage.getItem("token");
-        if (token) {
-          const userResponse = await axios.get(`${API_URL}/api/user`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setUser(userResponse.data);
-          const cartResponse = await axios.get(`${API_URL}/api/cart/${userResponse.data.id}`);
-          const cartData = {};
-          cartResponse.data.forEach(item => {
-            cartData[item.productId._id] = item.quantity;
-          });
-          setCartItems(cartData);
-        }
-      } catch (error) {
-        console.error('Error fetching products or user data:', error);
-      }
-    };
+  const fetchUserData = async (token) => {
+    try {
+      const response = await axios.get(`${API_URL}//profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data.user);
+      fetchUserCart(response.data.user._id, token);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setUser(null);
+    }
+  };
 
-    fetchProductsAndUser();
-  }, [API_URL]);
+  const fetchUserCart = async (userId, token) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/cart/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCartItems(response.data.items);
+    } catch (error) {
+      console.error("Error fetching user cart:", error);
+    }
+  };
 
   const addToCart = async (productId) => {
     if (user) {
       try {
-        const response = await axios.post(`${API_URL}/api/cart/${user.id}/add`, { productId });
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_URL}/api/cart/${user._id}/add`,
+          { productId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const updatedCartItems = {};
-        response.data.forEach(item => {
+        response.data.items.forEach((item) => {
           updatedCartItems[item.productId._id] = item.quantity;
         });
         setCartItems(updatedCartItems);
       } catch (error) {
-        console.error('Error adding item to cart:', error);
+        console.error("Error adding item to cart:", error);
       }
     } else {
-      setCartItems((prev) => ({ ...prev, [productId]: prev[productId] + 1 }));
+      setCartItems((prev) => ({
+        ...prev,
+        [productId]: prev[productId] + 1,
+      }));
     }
   };
 
   const removeFromCart = async (productId) => {
     if (user) {
       try {
-        const response = await axios.post(`${API_URL}/api/cart/${user.id}/remove`, { productId });
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_URL}/api/cart/${user._id}/remove`,
+          { productId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const updatedCartItems = {};
-        response.data.forEach(item => {
+        response.data.items.forEach((item) => {
           updatedCartItems[item.productId._id] = item.quantity;
         });
         setCartItems(updatedCartItems);
       } catch (error) {
-        console.error('Error removing item from cart:', error);
+        console.error("Error removing item from cart:", error);
       }
     } else {
-      setCartItems((prev) => ({ ...prev, [productId]: Math.max(prev[productId] - 1, 0) }));
+      setCartItems((prev) => ({
+        ...prev,
+        [productId]: Math.max(prev[productId] - 1, 0),
+      }));
     }
   };
 
@@ -84,7 +115,9 @@ const ShopContextProvider = ({ children }) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = products.find((product) => product.id === Number(item));
+        let itemInfo = products.find(
+          (product) => product.id === Number(item)
+        );
         totalAmount += itemInfo.new_price * cartItems[item];
       }
     }
@@ -110,12 +143,11 @@ const ShopContextProvider = ({ children }) => {
     getTotalAmountCart,
     user,
     setUser,
+    fetchUserData,
   };
 
   return (
-    <ShopContext.Provider value={contextValue}>
-      {children}
-    </ShopContext.Provider>
+    <ShopContext.Provider value={contextValue}>{children}</ShopContext.Provider>
   );
 };
 
