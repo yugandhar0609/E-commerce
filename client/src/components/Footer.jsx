@@ -178,7 +178,7 @@ const Footer = () => {
           </div>
           <div class="bg-gray-300">
             <div class="container px-5 py-4 mx-auto">
-              <p class="text-sm text-gray-700 capitalize xl:text-center">
+              <p class="text-sm text-gray-700 capitalize xl:text-center flexCenter">
                 © Powered by yugandhar{" "}
               </p>
             </div>

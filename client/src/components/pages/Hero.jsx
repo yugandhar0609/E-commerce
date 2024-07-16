@@ -32,7 +32,7 @@ const Hero = () => {
             </span>
           </div>
         </div>
-        <div className="max-xs:flex-col flex gap-2 ">
+        <div className="max-xs:flex-row flex gap-2 ">
           <Link to="" className={"btn_dark_rounded flexCenter"}>
             Shop Now
           </Link>

@@ -27,7 +27,7 @@ const ShopContextProvider = ({ children }) => {
 
   const fetchUserData = async (token) => {
     try {
-      const response = await axios.get(`${API_URL}//profile`, {
+      const response = await axios.get(`${API_URL}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,18 +40,18 @@ const ShopContextProvider = ({ children }) => {
     }
   };
 
-  const fetchUserCart = async (userId, token) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/cart/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCartItems(response.data.items);
-    } catch (error) {
-      console.error("Error fetching user cart:", error);
-    }
-  };
+  // const fetchUserCart = async (userId, token) => {
+  //   try {
+  //     const response = await axios.get(`${API_URL}/api/cart/${userId}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     setCartItems(response.data.items);
+  //   } catch (error) {
+  //     console.error("Error fetching user cart:", error);
+  //   }
+  // };
 
   const addToCart = async (productId) => {
     if (user) {

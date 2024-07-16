@@ -68,10 +68,10 @@ const Header = () => {
           }`}
         />
         <div className="flex items-center gap-x-2 sm:hidden">
-          <Link to="/" className="flex relative">
+          <Link to="/cart" className="flex relative">
             <FaOpencart className="p-1 h-8 w-8 ring-1 rounded-full ring-slate-900/30" />
             <span className="relative flexCenter w-5 h-5 rounded-full bg-secondary text-white medium-14 -top-2">
-              {getTotalAmountCart()} {/* Ensure this function is called */}
+              {getTotalAmountCart()} 
             </span>
           </Link>
           {user ? (

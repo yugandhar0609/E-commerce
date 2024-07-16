@@ -41,7 +41,7 @@ function App() {
         <Route path="/profile" element={<UserProfile/>} />
 
       </Routes>
-      {/* {!hideFooterRoutes.includes(location.pathname) && <Footer />} */}
+      {!hideFooterRoutes.includes(location.pathname) && <Footer />}
     </ShopContextProvider>
   );
 }
