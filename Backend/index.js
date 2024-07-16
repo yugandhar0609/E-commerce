@@ -24,8 +24,8 @@ app.listen(port, () => {
 });
 
 // Health check endpoint
-// app.get('/health', async (req, res) => {
-//   const dbState = mongoose.connection.readyState;
-//   const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
-//   res.status(200).send(`Server is healthy. Database status: ${states[dbState]}`);
-// });
+app.get('/health', async (req, res) => {
+  const dbState = mongoose.connection.readyState;
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.status(200).send(`Server is healthy. Database status: ${states[dbState]}`);
+});
