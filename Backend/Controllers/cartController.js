@@ -1,4 +1,4 @@
-import CartModels from '../models/CartModels.js';
+import CartModels from '../Models/CartModels.js';
 
 
 // Get user's cart
